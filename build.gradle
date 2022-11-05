@@ -29,6 +29,7 @@ dependencies {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
 	testImplementation("org.jmockit:jmockit:1.49")
+	compileOnly('javax.persistence:javax.persistence-api:2.2')
 }
 
 test {
