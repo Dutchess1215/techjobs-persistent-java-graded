@@ -29,6 +29,10 @@ public class HomeController {
     private JobRepository jobRepository;
     @Autowired
     private  SkillRepository skillRepository;
+
+    public HomeController() {
+    }
+
     @RequestMapping("")
     public String index(Model model) {
 
@@ -54,6 +58,7 @@ public class HomeController {
 
         if (errors.hasErrors()) {
             model.addAttribute("title", "Add Job");
+            model.addAttribute("jobs", jobRepository.findAll());
             model.addAttribute("employers", employerRepository.findAll());
             model.addAttribute("skills", skillRepository.findAll());
             return "add";
@@ -63,6 +68,7 @@ public class HomeController {
         List<Skill> skillObjs = (List<Skill>) skillRepository.findAllById(skills);
         newJob.setSkills(skillObjs);
         jobRepository.save(newJob);
+
         return "redirect:";
     }
 
@@ -71,6 +77,5 @@ public class HomeController {
 
         return "view";
     }
-
 
 }
