@@ -30,8 +30,8 @@ public class HomeController {
     @Autowired
     private  SkillRepository skillRepository;
 
-    public HomeController() {
-    }
+    //public HomeController() {
+    //}
 
     @RequestMapping("")
     public String index(Model model) {
@@ -52,7 +52,8 @@ public class HomeController {
 
     @PostMapping("add")
     public String processAddJobForm(@ModelAttribute @Valid Job newJob,
-                                       Errors errors, Model model, @RequestParam int employerId, @RequestParam List<Integer> skills) {
+                                       Errors errors, Model model, @RequestParam int employerId,
+                                       @RequestParam(required = false) List<Integer> skills) {
 
 
         if (errors.hasErrors()) {
@@ -62,17 +63,32 @@ public class HomeController {
             return "add";
         }
         Optional optEmployer = employerRepository.findById(employerId);
-        newJob.setEmployer((Employer)optEmployer.get());
+        newJob.setEmployer((Employer) optEmployer.get());
+        //System.out.println((Employer)optEmployer.get());
+
         List<Skill> skillObjs = (List<Skill>) skillRepository.findAllById(skills);
         newJob.setSkills(skillObjs);
+        //System.out.println(newJob.getSkills());
+
         jobRepository.save(newJob);
+
+        //Optional newJ = jobRepository.findById(newJob.getId());
+        //Job temp = (Job)newJ.get();
+        //System.out.println(newJob.getId());
 
         return "redirect:";
     }
 
     @GetMapping("view/{jobId}")
     public String displayViewJob(Model model, @PathVariable int jobId) {
-
+        System.out.println("hello");
+        Optional optJob = jobRepository.findById(jobId);
+        //Job temp = (Job)optJob.get();
+        //System.out.println(temp.getId());
+        //System.out.println(temp.getName());
+        //System.out.println(temp.getSkills());
+        //System.out.println(temp.getEmployer());
+        model.addAttribute(optJob.get());
         return "view";
     }
 
